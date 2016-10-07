@@ -1,7 +1,6 @@
-FROM Ubuntu:16.04
-MAINTAINER MaysamAL TeamTeos <alh.maysam@gmail.com>
+FROM debian:jessie
+MAINTAINER Odoo S.A. <info@odoo.com>
 
-# Copied from odoo docker officiel
 # Install some deps, lessc and less-plugin-clean-css, and wkhtmltopdf
 RUN set -x; \
         apt-get update \
