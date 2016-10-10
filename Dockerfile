@@ -1,4 +1,4 @@
-FROM debian:jessie
+ FROM debian:jessie
 MAINTAINER Odoo S.A. <info@odoo.com>
 
 # Install some deps, lessc and less-plugin-clean-css, and wkhtmltopdf
@@ -52,4 +52,4 @@ ENV OPENERP_SERVER /etc/odoo/openerp-server.conf
 USER odoo
 
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["~/odoo-dev/odoo/odoo-bin"]
+CMD ["odoo-bin"]
