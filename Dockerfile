@@ -57,15 +57,15 @@ RUN set -x; \
 
 USER root
 RUN mkdir -p /var/log/odoo
-RUN chown odoo:odoo /var/log/odoo
+RUN chown odoo /var/log/odoo
 RUN chmod 777 -R /var/log/odoo
 # Execution environment 
 # USER 0 # Copy entrypoint script , Odoo Service script and Odoo configuration file 
 COPY ./entrypoint.sh /
-RUN chown odoo:odoo /entrypoint.sh
+RUN chown odoo /entrypoint.sh
 RUN chmod 777  /entrypoint.sh
 COPY ./openerp-server.conf /etc/
-RUN chown odoo:odoo /etc/openerp-server.conf
+RUN chown odoo /etc/openerp-server.conf
 RUN chmod 777 /etc/openerp-server.conf
 
 #ADD sources/pip-req.txt /opt/sources/pip-req.txt
