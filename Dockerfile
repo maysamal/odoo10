@@ -57,6 +57,8 @@ RUN set -x; \
 
 # Copy entrypoint script and Odoo configuration file
 COPY ./entrypoint.sh /
+RUN chown odoo /entrypoint.sh
+RUN chmod 777  /entrypoint.sh
 COPY ./openerp-server.conf /etc/odoo/
 RUN chown odoo /etc/odoo/openerp-server.conf
 
