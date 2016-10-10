@@ -12,10 +12,10 @@ export PGHOST PGPORT PGUSER PGPASSWORD
 case "$1" in
 	--)
 		shift
-		exec odoo-bin "$@"
+		exec openerp-server "$@"
 		;;
 	-*)
-		exec odoo-bin "$@"
+		exec openerp-server "$@"
 		;;
 	*)
 		exec "$@"
