@@ -19,14 +19,6 @@ RUN set -x; \
         && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false -o APT::AutoRemove::SuggestsImportant=false npm \
         && rm -rf /var/lib/apt/lists/* wkhtmltox.deb
 
-##########################
-ADD http://download.gna.org/wkhtmltopdf/0.12/0.12.1/wkhtmltox-0.12.1_linux-trusty-amd64.deb wkhtmltox.deb
-RUN dpkg --force-depends -i wkhtmltox.deb
-RUN cp /usr/local/bin/wkhtmltopdf /usr/bin
-RUN cp /usr/local/bin/wkhtmltoimage /usr/bin
-RUN rm wkhtmltox.deb
-##########################
-
 # Install Odoo
 ENV ODOO_VERSION 10.0
 ENV ODOO_RELEASE 20161007
