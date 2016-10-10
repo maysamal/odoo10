@@ -19,6 +19,14 @@ RUN set -x; \
         && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false -o APT::AutoRemove::SuggestsImportant=false npm \
         && rm -rf /var/lib/apt/lists/* wkhtmltox.deb
 
+##########################
+ADD http://download.gna.org/wkhtmltopdf/0.12/0.12.1/wkhtmltox-0.12.1_linux-trusty-amd64.deb wkhtmltox.deb
+RUN dpkg --force-depends -i wkhtmltox.deb
+RUN cp /usr/local/bin/wkhtmltopdf /usr/bin
+RUN cp /usr/local/bin/wkhtmltoimage /usr/bin
+RUN rm wkhtmltox.deb
+##########################
+
 # Install Odoo
 ENV ODOO_VERSION 10.0
 ENV ODOO_RELEASE 20161007
@@ -55,26 +63,38 @@ RUN set -x; \
 #CMD ["odoo-bin"]
 ###################################"
 
-# Copy entrypoint script and Odoo configuration file
+USER root
+RUN mkdir -p /var/log/odoo
+RUN chown odoo:odoo /var/log/odoo
+RUN chmod 777 -R /var/log/odoo
+# Execution environment 
+# USER 0 # Copy entrypoint script , Odoo Service script and Odoo configuration file 
 COPY ./entrypoint.sh /
-RUN chown odoo /entrypoint.sh
+RUN chown odoo:odoo /entrypoint.sh
 RUN chmod 777  /entrypoint.sh
-COPY ./openerp-server.conf /etc/odoo/
-RUN chown odoo /etc/odoo/openerp-server.conf
+COPY ./openerp-server.conf /etc/
+RUN chown odoo:odoo /etc/openerp-server.conf
+RUN chmod 777 /etc/openerp-server.conf
 
-# Mount /var/lib/odoo to allow restoring filestore and /mnt/extra-addons for users addons
+#ADD sources/pip-req.txt /opt/sources/pip-req.txt
+#RUN pip install -r /opt/sources/pip-req.txt
+#COPY /opt/odoo/openerp-server /etc/init.d/  # added by self
+COPY ./openerp-server /etc/init.d/
+RUN chmod 755 /etc/init.d/openerp-server
+RUN chown root: /etc/init.d/openerp-server
+# Create service sudo service odoo-server start 
+RUN update-rc.d openerp-server defaults
+# Start odoo service 
+RUN service openerp-server status
+# Mount /opt/odoo to allow restoring filestore and /mnt/extra-addons for users addons 
 RUN mkdir -p /mnt/extra-addons \
         && chown -R odoo /mnt/extra-addons
-VOLUME ["/var/lib/odoo", "/mnt/extra-addons"]
-
-# Expose Odoo services
-EXPOSE 8069 8071
-
-# Set the default config file
-ENV OPENERP_SERVER /etc/odoo/openerp-server.conf
-
-# Set default user when running the container
+VOLUME ["/opt/odoo", "/mnt/extra-addons"]
+# Expose Odoo services 
+EXPOSE 8069 8071 
+# Set the default config file 
+ENV OPENERP_SERVER /etc/openerp-server.conf 
+# Set default user when running the container 
 USER odoo
-
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["openerp-server"]
+CMD ["/opt/odoo/openerp-server"]
