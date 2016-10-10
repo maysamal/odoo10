@@ -71,13 +71,13 @@ RUN chmod 777 /etc/openerp-server.conf
 #ADD sources/pip-req.txt /opt/sources/pip-req.txt
 #RUN pip install -r /opt/sources/pip-req.txt
 #COPY /opt/odoo/openerp-server /etc/init.d/  # added by self
-COPY ./openerp-server /etc/init.d/
-RUN chmod 755 /etc/init.d/openerp-server
-RUN chown root: /etc/init.d/openerp-server
+#COPY ./openerp-server /etc/init.d/
+#RUN chmod 755 /etc/init.d/openerp-server
+#RUN chown root: /etc/init.d/openerp-server
 # Create service sudo service odoo-server start 
-RUN update-rc.d openerp-server defaults
+#RUN update-rc.d openerp-server defaults
 # Start odoo service 
-RUN service openerp-server status
+RUN service odoo status
 # Mount /opt/odoo to allow restoring filestore and /mnt/extra-addons for users addons 
 RUN mkdir -p /mnt/extra-addons \
         && chown -R odoo /mnt/extra-addons
