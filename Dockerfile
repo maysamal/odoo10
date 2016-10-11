@@ -34,8 +34,8 @@ RUN set -x; \
 COPY ./entrypoint.sh /
 RUN chown odoo /entrypoint.sh
 RUN chmod 777  /entrypoint.sh
-COPY ./openerp-server.conf /etc/odoo/
-RUN chown odoo /etc/odoo/openerp-server.conf
+COPY ./odoo-server.conf /etc/odoo/
+RUN chown odoo /etc/odoo/odoo-server.conf
 
 # Mount /var/lib/odoo to allow restoring filestore and /mnt/extra-addons for users addons
 RUN mkdir -p /mnt/extra-addons \
@@ -46,10 +46,10 @@ VOLUME ["/var/lib/odoo", "/mnt/extra-addons"]
 EXPOSE 8069 8071
 
 # Set the default config file
-ENV OPENERP_SERVER /etc/odoo/openerp-server.conf
+ENV OPENERP_SERVER /etc/odoo/odoo-server.conf
 
 # Set default user when running the container
 USER odoo
 
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["/etc/odoo/openerp-server"]
+CMD ["odoo"]
